@@ -3,6 +3,7 @@ import evaluación
 import desembolso
 from rechazados import rechazados
 from aprobados import aprobados
+import pickle
 
 def mostrar_clientes_rechazados():
     if not rechazados:
@@ -22,6 +23,22 @@ def mostrar_clientes_aprobados():
     for cliente in aprobados:
         print(f"{cliente['nombres']} {cliente['apellidos']} - Crédito: ${cliente['credito_solicitado']} - Años: {cliente['años_pagar']}")
 
+# Nueva función para mostrar clientes desembolsados
+def mostrar_clientes_desembolsados():
+    try:
+        with open('clientes_desembolsados.pkl', 'rb') as f:
+            clientes_desembolsados = pickle.load(f)
+    except FileNotFoundError:
+        clientes_desembolsados = []
+
+    if not clientes_desembolsados:
+        print("No hay clientes desembolsados.")
+        return
+
+    print("\nListado de clientes desembolsados:")
+    for cliente in clientes_desembolsados:
+        print(f"{cliente['nombres']} {cliente['apellidos']} - Crédito: ${cliente['credito_solicitado']} - Años: {cliente['años_pagar']}")
+
 def menu():
     while True:
         print("\nOpciones:")
@@ -29,9 +46,10 @@ def menu():
         print("2. Mostrar los clientes rechazados")
         print("3. Mostrar los clientes aprobados")
         print("4. Desembolsar")
-        print("5. Salir")
+        print("5. Mostrar los clientes desembolsados")  # Nueva opción
+        print("6. Salir")
 
-        opcion = input("Seleccione una opción (1-5): ")
+        opcion = input("Seleccione una opción (1-6): ")
 
         if opcion == '1':
             entrevista.realizar_entrevista()
@@ -43,6 +61,8 @@ def menu():
         elif opcion == '4':
             desembolso.main()
         elif opcion == '5':
+            mostrar_clientes_desembolsados()  # Nueva funcionalidad
+        elif opcion == '6':
             print("Saliendo del programa.")
             break
         else:

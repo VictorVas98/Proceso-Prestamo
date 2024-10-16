@@ -1,5 +1,23 @@
+import pickle
 from aprobados import aprobados
 from clientesAprobados import clientes_aprobados
+
+# Cargar datos de clientes desembolsados desde el archivo .pkl
+try:
+    with open('clientes_desembolsados.pkl', 'rb') as f:
+        clientes_aprobados = pickle.load(f)
+except FileNotFoundError:
+    clientes_aprobados = []
+
+# Guardar la lista de clientes desembolsados
+def guardar_clientes_desembolsados():
+    with open('clientes_desembolsados.pkl', 'wb') as f:
+        pickle.dump(clientes_aprobados, f)
+
+# Guardar la lista actualizada de clientes aprobados
+def guardar_aprobados():
+    with open('aprobados.pkl', 'wb') as f:
+        pickle.dump(aprobados, f)
 
 def mostrar_listado_aprobados():
     if not aprobados:
@@ -16,21 +34,28 @@ def seleccionar_cliente():
             seleccion = int(input("\nSeleccione el número del cliente al que se le va a desembolsar el préstamo: "))
             if 1 <= seleccion <= len(aprobados):
                 cliente_seleccionado = aprobados[seleccion - 1]
-                return cliente_seleccionado
+                return cliente_seleccionado, seleccion - 1  # Devolver también el índice del cliente
             else:
                 print("Número de cliente inválido. Intente nuevamente.")
         except ValueError:
             print("Entrada inválida. Debe ingresar un número.")
 
-def realizar_desembolso(cliente):
+def realizar_desembolso(cliente, indice):
+    # Añadir cliente a la lista de clientes desembolsados
     clientes_aprobados.append(cliente)
+    guardar_clientes_desembolsados()
+
+    # Eliminar cliente de la lista de aprobados
+    del aprobados[indice]
+    guardar_aprobados()
+
     print(f"\nSe ha aprobado el préstamo para {cliente['nombres']} {cliente['apellidos']} por ${cliente['credito_solicitado']} durante {cliente['años_pagar']} años.")
 
 def main():
     mostrar_listado_aprobados()
     if aprobados:
-        cliente_seleccionado = seleccionar_cliente()
-        realizar_desembolso(cliente_seleccionado)
+        cliente_seleccionado, indice = seleccionar_cliente()
+        realizar_desembolso(cliente_seleccionado, indice)
 
 if __name__ == "__main__":
     main()
