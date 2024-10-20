@@ -23,7 +23,7 @@ def mostrar_clientes_aprobados():
     for cliente in aprobados:
         print(f"{cliente['nombres']} {cliente['apellidos']} - Crédito: ${cliente['credito_solicitado']} - Años: {cliente['años_pagar']}")
 
-# Nueva función para mostrar clientes desembolsados
+
 def mostrar_clientes_desembolsados():
     try:
         with open('clientes_desembolsados.pkl', 'rb') as f:
@@ -46,7 +46,7 @@ def menu():
         print("2. Mostrar los clientes rechazados")
         print("3. Mostrar los clientes aprobados")
         print("4. Desembolsar")
-        print("5. Mostrar los clientes desembolsados")  # Nueva opción
+        print("5. Mostrar los clientes desembolsados")
         print("6. Salir")
 
         opcion = input("Seleccione una opción (1-6): ")
@@ -61,7 +61,7 @@ def menu():
         elif opcion == '4':
             desembolso.main()
         elif opcion == '5':
-            mostrar_clientes_desembolsados()  # Nueva funcionalidad
+            mostrar_clientes_desembolsados() 
         elif opcion == '6':
             print("Saliendo del programa.")
             break
